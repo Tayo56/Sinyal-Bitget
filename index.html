@@ -1,7 +1,4 @@
-<!DOCTYPE html>
-<html lang="en">
-
-<head>
+<!DOCTYPE html><html lang="en"><head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Analyzer Bitget Coin</title>
@@ -14,97 +11,90 @@
       font-family: 'Segoe UI', sans-serif;
       background-color: #f0f8ff;
       color: #003366;
-    }
+    }header {
+  background-color: #00bfff;
+  color: white;
+  padding: 15px;
+  text-align: center;
+  font-size: 22px;
+  font-weight: bold;
+}
 
-    header {
-      background-color: #00bfff;
-      color: white;
-      padding: 15px;
-      text-align: center;
-      font-size: 22px;
-      font-weight: bold;
-    }
+nav {
+  display: flex;
+  justify-content: space-around;
+  background: #009ad6;
+  padding: 10px;
+  color: white;
+}
 
-    nav {
-      display: flex;
-      justify-content: space-around;
-      background: #009ad6;
-      padding: 10px;
-      color: white;
-    }
+nav a {
+  color: white;
+  text-decoration: none;
+  font-weight: bold;
+}
 
-    nav a {
-      color: white;
-      text-decoration: none;
-      font-weight: bold;
-    }
+.container {
+  padding: 20px;
+}
 
-    .container {
-      padding: 20px;
-    }
+.toolbar {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 20px;
+  align-items: center;
+}
 
-    .toolbar {
-      display: flex;
-      gap: 10px;
-      margin-bottom: 20px;
-      align-items: center;
-    }
+select,
+button {
+  padding: 5px 10px;
+  font-size: 14px;
+}
 
-    select,
-    button {
-      padding: 5px 10px;
-      font-size: 14px;
-    }
+.note {
+  background-color: #e6f7ff;
+  padding: 10px;
+  border-left: 5px solid #00bfff;
+  margin-bottom: 10px;
+}
 
-    .note {
-      background-color: #e6f7ff;
-      padding: 10px;
-      border-left: 5px solid #00bfff;
-      margin-bottom: 10px;
-    }
+table {
+  width: 100%;
+  border-collapse: collapse;
+  background: white;
+}
 
-    table {
-      width: 100%;
-      border-collapse: collapse;
-      background: white;
-    }
+th,
+td {
+  border: 1px solid #ddd;
+  padding: 10px;
+  text-align: center;
+}
 
-    th,
-    td {
-      border: 1px solid #ddd;
-      padding: 10px;
-      text-align: center;
-    }
+th {
+  background-color: #00bfff;
+  color: white;
+}
 
-    th {
-      background-color: #00bfff;
-      color: white;
-    }
+footer {
+  background-color: #009ad6;
+  color: white;
+  text-align: center;
+  padding: 10px;
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+}
 
-    footer {
-      background-color: #009ad6;
-      color: white;
-      text-align: center;
-      padding: 10px;
-      position: fixed;
-      bottom: 0;
-      width: 100%;
-    }
   </style>
-</head>
-
-<body>
-  <header>Analyzer Bitget Coin</header>
-
-  <nav>
+</head><body>
+  <header>Analyzer Bitget Coin</header>  <nav>
     <a href="#">Home</a>
     <a href="#">Analyze</a>
     <a href="#">News</a>
     <a href="#">About</a>
     <a href="#">Chatroom</a>
-  </nav>
-
-  <div class="container">
+  </nav>  <div class="container">
     <div class="toolbar">
       <label>Mode:
         <select>
@@ -124,60 +114,54 @@
         </select>
       </label>
       <button onclick="analyzeAll()">🔍 Analyzing All</button>
-    </div>
+    </div><div class="note">
+  🗕️ Data analisa terakhir: <span id="last-update">30/07/2025, 18:00:00</span><br />
+  📌 Klik tombol Analyzing All untuk memperbarui manual.
+</div>
 
-    <div class="note">
-      📅 Data analisa terakhir: <span id="last-update">30/07/2025, 18:00:00</span><br />
-      📌 Klik tombol Analyzing All untuk memperbarui manual.
-    </div>
+<table>
+  <thead>
+    <tr>
+      <th>Symbol</th>
+      <th>Last Price</th>
+      <th>Signal</th>
+      <th>RSI</th>
+      <th>MACD</th>
+      <th>EMA</th>
+    </tr>
+  </thead>
+  <tbody id="coin-table">
+    <tr>
+      <td colspan="6">🔄 Loading data from signals.json...</td>
+    </tr>
+  </tbody>
+</table>
 
-    <table>
-      <thead>
-        <tr>
-          <th>Symbol</th>
-          <th>Last Price</th>
-          <th>Signal</th>
-          <th>RSI</th>
-          <th>MACD</th>
-          <th>EMA</th>
-          <th>Volume</th>
-          <th>Price Action</th>
-        </tr>
-      </thead>
-      <tbody id="coin-table">
-        <tr>
-          <td>BTCUSDT</td>
-          <td>62,312.45</td>
-          <td><b style="color:green">BUY</b></td>
-          <td>RSI 60.23</td>
-          <td>Bullish</td>
-          <td>EMA9>EMA21</td>
-          <td>↑ Strong</td>
-          <td>Breakout Resistance</td>
-        </tr>
-        <tr>
-          <td>ETHUSDT</td>
-          <td>3,826.41</td>
-          <td><b style="color:red">SELL</b></td>
-          <td>RSI 42.10</td>
-          <td>Bearish</td>
-          <td>EMA9<EMA21</td>
-          <td>↓ Weak</td>
-          <td>Failed Support</td>
-        </tr>
-      </tbody>
-    </table>
-  </div>
-
-  <footer>
+  </div>  <footer>
     &copy; 2025 Analyzer Bitget Coin - Signal by Pipedream, Google Sheets & GitHub Pages
-  </footer>
-
-  <script>
+  </footer>  <script>
     function analyzeAll() {
-      alert("Analisa sedang diproses... (fitur dummy)");
-    }
-  </script>
-</body>
+      fetch('data/signals.json')
+        .then(res => res.json())
+        .then(data => {
+          const table = document.getElementById("coin-table");
+          table.innerHTML = '';
 
-</html>
+          data.forEach(item => {
+            const row = document.createElement("tr");
+            row.innerHTML = `
+              <td>${item.symbol}</td>
+              <td>${item.price}</td>
+              <td><b style="color:${item.signal === 'BUY' ? 'green' : 'red'}">${item.signal}</b></td>
+              <td>${item.rsi}</td>
+              <td>${item.macd}</td>
+              <td>${item.ema_cross}</td>
+            `;
+            table.appendChild(row);
+          });
+        })
+        .catch(err => {
+          document.getElementById("coin-table").innerHTML = `<tr><td colspan="6">⚠️ Gagal mengambil data: ${err}</td></tr>`;
+        });
+    }
+  </script></body></html>
