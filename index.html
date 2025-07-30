@@ -5,48 +5,36 @@
   <title>Aanalyzer</title>
   <style>
     body {
-      margin: 0;
       font-family: Arial, sans-serif;
-      background-color: #111;
-      color: #fff;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: start;
-      min-height: 100vh;
-    }
-    .header {
-      background-color: #000;
-      width: 100%;
+      background-color: #0d0d0d;
+      color: white;
       text-align: center;
-      padding: 20px 0;
-      font-size: 28px;
-      font-weight: bold;
-      color: #3498db;
+      padding: 30px;
     }
-    .button-container {
-      margin-top: 30px;
+    h1 {
+      color: #3399ff;
     }
     button {
-      padding: 10px 25px;
-      font-size: 16px;
-      background-color: #3498db;
-      color: #fff;
-      border: none;
-      border-radius: 6px;
+      padding: 10px 20px;
+      font-size: 18px;
+      margin-top: 20px;
       cursor: pointer;
+      background-color: #3399ff;
+      border: none;
+      border-radius: 5px;
+      color: white;
     }
-    .result {
-      margin-top: 30px;
-      padding: 20px;
-      border-radius: 8px;
-      width: 80%;
-      max-width: 600px;
+    pre {
       background-color: #1e1e1e;
+      padding: 20px;
+      margin-top: 30px;
+      border-radius: 10px;
+      text-align: left;
+      max-width: 100%;
+      overflow-x: auto;
     }
     .error {
       color: red;
-      font-weight: bold;
     }
     .success {
       color: lightgreen;
@@ -54,33 +42,36 @@
   </style>
 </head>
 <body>
-  <div class="header">Aanalyzer</div>  <div class="button-container">
-    <button id="analyzeBtn">Analyzing All</button>
-  </div>  <div id="resultBox" class="result"></div>  <script>
-    const analyzeBtn = document.getElementById("analyzeBtn");
-    const resultBox = document.getElementById("resultBox");
-
-    analyzeBtn.addEventListener("click", async () => {
-      analyzeBtn.disabled = true;
-      resultBox.textContent = "Fetching data from Bitget...";
-      resultBox.className = "result";
+  <h1>Aanalyzer</h1>
+  <button onclick="analyzeAll()">Analyzing All</button>
+  <pre id="output"></pre>  <script>
+    async function analyzeAll() {
+      const output = document.getElementById('output');
+      output.innerHTML = '⏳ Analyzing signals from Bitget...';
 
       try {
-        const response = await fetch("https://eozx3c80x8e7tx1.m.pipedream.net");
-        const contentType = response.headers.get("content-type");
+        const response = await fetch('https://eozx3c80x8e7tx1.m.pipedream.net');
+        const contentType = response.headers.get('content-type');
+        const text = await response.text();
 
-        if (contentType && contentType.includes("application/json")) {
-          const json = await response.json();
-          resultBox.innerHTML = `<div class="success">✅ Success: ${JSON.stringify(json)}</div>`;
+        if (contentType && contentType.includes('application/json')) {
+          const json = JSON.parse(text);
+          output.innerHTML = formatSignals(json);
         } else {
-          const text = await response.text();
-          resultBox.innerHTML = `<div class="success">✅ Response: ${text}</div>`;
+          output.innerHTML = '<span class="success">' + text + '</span>';
         }
-      } catch (err) {
-        resultBox.innerHTML = `<div class="error">❌ Error: ${err.message}</div>`;
+      } catch (error) {
+        output.innerHTML = '<span class="error">❌ Error: ' + error.message + '</span>';
       }
+    }
 
-      analyzeBtn.disabled = false;
-    });
+    function formatSignals(data) {
+      if (!Array.isArray(data)) {
+        return JSON.stringify(data, null, 2);
+      }
+      return data.map(coin => {
+        return `📊 ${coin.symbol} (${coin.timeframe})\n✅ RSI: ${coin.rsi}\n✅ MACD: ${coin.macd}\n✅ EMA: ${coin.ema}\n✅ MA: ${coin.ma}\n✅ Volume: ${coin.volume}\n✅ Price Action: ${coin.price_action}`;
+      }).join('\n\n');
+    }
   </script></body>
 </html>
