@@ -2,71 +2,127 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Crypto Signal Analyzer</title>
+  <title>Aanalyzer - Crypto Signal</title>
   <style>
     body {
       margin: 0;
-      padding: 20px;
+      padding: 0;
       font-family: Arial, sans-serif;
       background-color: #181A20;
+      color: #fff;
+    }
+    .header {
+      background-color: #000;
+      padding: 16px;
+      text-align: center;
+      font-size: 24px;
+      font-weight: bold;
+      color: #3498db;
+    }
+    .container {
+      max-width: 800px;
+      margin: auto;
+      padding: 20px;
+    }
+    .section {
+      background-color: #2a2e35;
+      padding: 20px;
+      margin-bottom: 20px;
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.5);
+    }
+    .section h2 {
+      margin-top: 0;
+      color: #3498db;
+    }
+    .button {
+      background-color: #3498db;
       color: white;
-    }.header {
-  background-color: #000;
-  border-bottom: 1px solid #3498db;
-  padding: 10px 20px;
-  position: sticky;
-  top: 0;
-  z-index: 100;
-}
-
-.logo {
-  font-size: 24px;
-  font-weight: bold;
-  color: #3498db;
-}
-
-.container {
-  max-width: 800px;
-  margin: auto;
-}
-
-.section {
-  background-color: #2a2e35;
-  margin-bottom: 20px;
-  padding: 20px;
-  border-radius: 12px;
-  box-shadow: 0 0 10px rgba(0,0,0,0.3);
-}
-
-.section h2 {
-  margin-top: 0;
-  color: #3498db;
-}
-
+      padding: 12px 24px;
+      border: none;
+      border-radius: 8px;
+      font-size: 16px;
+      font-weight: bold;
+      cursor: pointer;
+      margin-bottom: 20px;
+    }
+    .button:hover {
+      background-color: #2980b9;
+    }
   </style>
 </head>
 <body>
-  <div class="header">
-    <span class="logo">Aanalyzer</span>
-  </div>  <div class="container">
-    <div class="section">
-      <h2>📈 EMA Signal</h2>
-      <p>EMA 9 crossing EMA 21 → <strong>Buy Signal</strong></p>
-    </div><div class="section">
-  <h2>📊 MACD Signal</h2>
-  <p>MACD line above Signal line → <strong>Buy</strong></p>
+  <div class="header">Aanalyzer</div>
+  <div class="container">
+    <button class="button" onclick="analyze()">Analyzing All</button><div id="result" class="section">
+  <h2>🔍 Waiting for analysis...</h2>
+  <p>Click "Analyzing All" to fetch BTC/USDT data and generate signal.</p>
 </div>
 
-<div class="section">
-  <h2>📉 RSI Signal</h2>
-  <p>RSI 14 berada di bawah 30 → <strong>Oversold</strong></p>
-</div>
+  </div>  <script>
+    async function analyze() {
+      const resultBox = document.getElementById("result");
+      resultBox.innerHTML = `<h2>⏳ Analyzing BTC/USDT...</h2><p>Please wait...</p>`;
 
-<div class="section">
-  <h2>💡 Price Action</h2>
-  <p>Bullish engulfing terdeteksi → <strong>Potensi pembalikan naik</strong></p>
-</div>
+      try {
+        const res = await fetch("https://api.bitget.com/api/v2/market/candles?symbol=BTCUSDT&granularity=15m&limit=50");
+        const data = await res.json();
+        const candles = data.data.map(d => ({
+          time: d[0],
+          open: parseFloat(d[1]),
+          high: parseFloat(d[2]),
+          low: parseFloat(d[3]),
+          close: parseFloat(d[4]),
+          volume: parseFloat(d[5])
+        }));
 
-  </div>
-</body>
+        const closes = candles.map(c => c.close);
+
+        const ema = (arr, period) => {
+          const k = 2 / (period + 1);
+          return arr.reduce((acc, val, i) => {
+            if (i === 0) return [val];
+            acc.push(val * k + acc[i - 1] * (1 - k));
+            return acc;
+          }, []);
+        };
+
+        const ema9 = ema(closes, 9);
+        const ema21 = ema(closes, 21);
+
+        const lastEma9 = ema9[ema9.length - 1];
+        const lastEma21 = ema21[ema21.length - 1];
+
+        const rsi = (closes, period = 14) => {
+          let gains = 0, losses = 0;
+          for (let i = 1; i <= period; i++) {
+            let diff = closes[i] - closes[i - 1];
+            if (diff >= 0) gains += diff; else losses -= diff;
+          }
+          const rs = gains / losses;
+          return 100 - 100 / (1 + rs);
+        };
+
+        const rsiValue = rsi(closes);
+
+        let signal = "";
+
+        if (lastEma9 > lastEma21) {
+          signal += "📈 EMA 9 crossing above EMA 21 → <b>Buy Signal</b><br>";
+        } else if (lastEma9 < lastEma21) {
+          signal += "📉 EMA 9 crossing below EMA 21 → <b>Sell Signal</b><br>";
+        }
+
+        signal += `📊 RSI: ${rsiValue.toFixed(2)} → ` +
+                  (rsiValue < 30 ? "<b>Oversold (Buy)</b>" :
+                  rsiValue > 70 ? "<b>Overbought (Sell)</b>" : "<b>Neutral</b>");
+
+        resultBox.innerHTML = `<h2>✅ BTC/USDT Signal</h2><p>${signal}</p>`;
+
+      } catch (err) {
+        resultBox.innerHTML = `<h2>❌ Error</h2><p>Failed to fetch data or analyze. Check your connection.</p>`;
+        console.error(err);
+      }
+    }
+  </script></body>
 </html>
