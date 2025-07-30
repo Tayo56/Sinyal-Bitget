@@ -1,0 +1,38 @@
+[
+  {
+    "symbol": "BTCUSDT",
+    "timeframe": "15m",
+    "price": "62312.45",
+    "signal": "BUY",
+    "rsi": "60.23",
+    "macd": "Bullish",
+    "ema_cross": "EMA9>EMA21"
+  },
+  {
+    "symbol": "ETHUSDT",
+    "timeframe": "1h",
+    "price": "3421.10",
+    "signal": "SELL",
+    "rsi": "72.35",
+    "macd": "Bearish",
+    "ema_cross": "EMA9<EMA21"
+  },
+  {
+    "symbol": "DOGEUSDT",
+    "timeframe": "5m",
+    "price": "0.1882",
+    "signal": "BUY",
+    "rsi": "55.00",
+    "macd": "Bullish",
+    "ema_cross": "EMA9>EMA21"
+  },
+  {
+    "symbol": "SHIBUSDT",
+    "timeframe": "30m",
+    "price": "0.000028",
+    "signal": "SELL",
+    "rsi": "69.10",
+    "macd": "Bearish",
+    "ema_cross": "EMA9<EMA21"
+  }
+]
