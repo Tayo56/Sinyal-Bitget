@@ -1,77 +1,183 @@
-<!DOCTYPE html><html lang="en">
+<!DOCTYPE html>
+<html lang="en">
+
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Aanalyzer</title>
+  <title>Analyzer Bitget Coin</title>
+  <meta name="description" content="Analisa 100 coin populer dan coin meme dari Bitget secara otomatis dan real-time." />
+  <meta name="keywords" content="bitget analyzer,crypto signal,bitcoin,altcoin,scalping,intraday,swing,crypto trading" />
+  <link rel="icon" href="favicon.ico" type="image/x-icon" />
   <style>
     body {
-      font-family: Arial, sans-serif;
-      background-color: #0d0d0d;
+      margin: 0;
+      font-family: 'Segoe UI', sans-serif;
+      background-color: #f0f8ff;
+      color: #003366;
+    }
+
+    header {
+      background-color: #00bfff;
+      color: white;
+      padding: 15px;
+      text-align: center;
+      font-size: 22px;
+      font-weight: bold;
+    }
+
+    nav {
+      display: flex;
+      justify-content: space-around;
+      background: #009ad6;
+      padding: 10px;
+      color: white;
+    }
+
+    nav a {
+      color: white;
+      text-decoration: none;
+      font-weight: bold;
+    }
+
+    .container {
+      padding: 20px;
+    }
+
+    .toolbar {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 20px;
+      align-items: center;
+    }
+
+    select,
+    button {
+      padding: 5px 10px;
+      font-size: 14px;
+    }
+
+    .note {
+      background-color: #e6f7ff;
+      padding: 10px;
+      border-left: 5px solid #00bfff;
+      margin-bottom: 10px;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      background: white;
+    }
+
+    th,
+    td {
+      border: 1px solid #ddd;
+      padding: 10px;
+      text-align: center;
+    }
+
+    th {
+      background-color: #00bfff;
+      color: white;
+    }
+
+    footer {
+      background-color: #009ad6;
       color: white;
       text-align: center;
-      padding: 30px;
-    }
-    h1 {
-      color: #3399ff;
-    }
-    button {
-      padding: 10px 20px;
-      font-size: 18px;
-      margin-top: 20px;
-      cursor: pointer;
-      background-color: #3399ff;
-      border: none;
-      border-radius: 5px;
-      color: white;
-    }
-    pre {
-      background-color: #1e1e1e;
-      padding: 20px;
-      margin-top: 30px;
-      border-radius: 10px;
-      text-align: left;
-      max-width: 100%;
-      overflow-x: auto;
-    }
-    .error {
-      color: red;
-    }
-    .success {
-      color: lightgreen;
+      padding: 10px;
+      position: fixed;
+      bottom: 0;
+      width: 100%;
     }
   </style>
 </head>
+
 <body>
-  <h1>Aanalyzer</h1>
-  <button onclick="analyzeAll()">Analyzing All</button>
-  <pre id="output"></pre>  <script>
-    async function analyzeAll() {
-      const output = document.getElementById('output');
-      output.innerHTML = '⏳ Analyzing signals from Bitget...';
+  <header>Analyzer Bitget Coin</header>
 
-      try {
-        const response = await fetch('https://eozx3c80x8e7tx1.m.pipedream.net');
-        const contentType = response.headers.get('content-type');
-        const text = await response.text();
+  <nav>
+    <a href="#">Home</a>
+    <a href="#">Analyze</a>
+    <a href="#">News</a>
+    <a href="#">About</a>
+    <a href="#">Chatroom</a>
+  </nav>
 
-        if (contentType && contentType.includes('application/json')) {
-          const json = JSON.parse(text);
-          output.innerHTML = formatSignals(json);
-        } else {
-          output.innerHTML = '<span class="success">' + text + '</span>';
-        }
-      } catch (error) {
-        output.innerHTML = '<span class="error">❌ Error: ' + error.message + '</span>';
-      }
+  <div class="container">
+    <div class="toolbar">
+      <label>Mode:
+        <select>
+          <option>Scalping</option>
+          <option>Intraday</option>
+          <option>Swing</option>
+        </select>
+      </label>
+      <label>Timeframe:
+        <select>
+          <option>5m</option>
+          <option>15m</option>
+          <option>30m</option>
+          <option>1h</option>
+          <option>4h</option>
+          <option>1d</option>
+        </select>
+      </label>
+      <button onclick="analyzeAll()">🔍 Analyzing All</button>
+    </div>
+
+    <div class="note">
+      📅 Data analisa terakhir: <span id="last-update">30/07/2025, 18:00:00</span><br />
+      📌 Klik tombol Analyzing All untuk memperbarui manual.
+    </div>
+
+    <table>
+      <thead>
+        <tr>
+          <th>Symbol</th>
+          <th>Last Price</th>
+          <th>Signal</th>
+          <th>RSI</th>
+          <th>MACD</th>
+          <th>EMA</th>
+          <th>Volume</th>
+          <th>Price Action</th>
+        </tr>
+      </thead>
+      <tbody id="coin-table">
+        <tr>
+          <td>BTCUSDT</td>
+          <td>62,312.45</td>
+          <td><b style="color:green">BUY</b></td>
+          <td>RSI 60.23</td>
+          <td>Bullish</td>
+          <td>EMA9>EMA21</td>
+          <td>↑ Strong</td>
+          <td>Breakout Resistance</td>
+        </tr>
+        <tr>
+          <td>ETHUSDT</td>
+          <td>3,826.41</td>
+          <td><b style="color:red">SELL</b></td>
+          <td>RSI 42.10</td>
+          <td>Bearish</td>
+          <td>EMA9<EMA21</td>
+          <td>↓ Weak</td>
+          <td>Failed Support</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <footer>
+    &copy; 2025 Analyzer Bitget Coin - Signal by Pipedream, Google Sheets & GitHub Pages
+  </footer>
+
+  <script>
+    function analyzeAll() {
+      alert("Analisa sedang diproses... (fitur dummy)");
     }
+  </script>
+</body>
 
-    function formatSignals(data) {
-      if (!Array.isArray(data)) {
-        return JSON.stringify(data, null, 2);
-      }
-      return data.map(coin => {
-        return `📊 ${coin.symbol} (${coin.timeframe})\n✅ RSI: ${coin.rsi}\n✅ MACD: ${coin.macd}\n✅ EMA: ${coin.ema}\n✅ MA: ${coin.ma}\n✅ Volume: ${coin.volume}\n✅ Price Action: ${coin.price_action}`;
-      }).join('\n\n');
-    }
-  </script></body>
 </html>
