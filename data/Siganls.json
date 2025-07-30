@@ -1,0 +1,20 @@
+[
+  {
+    "symbol": "BTCUSDT",
+    "timeframe": "15m",
+    "price": "38200.50",
+    "signal": "Buy",
+    "rsi": "61.5",
+    "macd": "Bullish",
+    "ema_cross": "EMA9 > EMA21"
+  },
+  {
+    "symbol": "ETHUSDT",
+    "timeframe": "1h",
+    "price": "2450.10",
+    "signal": "Sell",
+    "rsi": "72.3",
+    "macd": "Bearish",
+    "ema_cross": "EMA9 < EMA21"
+  }
+]
